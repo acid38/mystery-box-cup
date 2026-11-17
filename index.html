@@ -214,7 +214,7 @@ function showCloudStatus(message,isError){
   const el=document.getElementById('cloudStatus');
   if(el){el.textContent=message;el.style.color=isError?'#ffaaaa':'#b7f88d';}
 }
-function player(id){return data.players.find(p=>p.id===id)||{name:'Usunięty gracz',club:''}}
+function player(id){return data.players.find(p=>String(p.id)===String(id))||{name:'Usunięty gracz',club:''}}
 function done(m){return m.hs!==''&&m.as!==''&&Number.isInteger(+m.hs)&&Number.isInteger(+m.as)&&+m.hs>=0&&+m.as>=0}
 function allMatches(){return data.rounds.flatMap((games,r)=>games.map((m,i)=>({...m,r,i})))}
 function stats(){return data.players.map(p=>{let s={...p,m:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};allMatches().filter(done).forEach(m=>{if(m.home!==p.id&&m.away!==p.id)return;s.m++;let own=+(m.home===p.id?m.hs:m.as),opp=+(m.home===p.id?m.as:m.hs);s.gf+=own;s.ga+=opp;if(own>opp){s.w++;s.pts+=3}else if(own===opp){s.d++;s.pts++}else s.l++});s.diff=s.gf-s.ga;return s})}
@@ -244,9 +244,9 @@ function tournamentPlayedCount(){return allMatches().filter(done).length}
 function drawIsComplete(){return (data.drawRemaining||[]).length===0&&(data.drawnOrder||[]).length===data.players.length}
 function typerWindowOpen(){return drawIsComplete()&&tournamentPlayedCount()===0&&data.players.length===10}
 function scoreTyperPrediction(prediction,actualOrder){
-  const actualPosition=new Map(actualOrder.map((p,i)=>[p.id,i+1]));
+  const actualPosition=new Map(actualOrder.map((p,i)=>[String(p.id),i+1]));
   return prediction.order.reduce((total,id,index)=>{
-    const actual=actualPosition.get(id);
+    const actual=actualPosition.get(String(id));
     if(!actual)return total;
     const difference=Math.abs((index+1)-actual);
     return total+(difference===0?5:difference<=2?1:difference<=4?0:difference<=6?-1:-3);
