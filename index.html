@@ -445,7 +445,7 @@ $('savePlayers').onclick=async()=>{
 };
 $('saveScores').onclick=()=>{let r=+$('adminRound').value;data.rounds[r].forEach((m,i)=>{let h=document.querySelector(`[data-h="${i}"]`).value,a=document.querySelector(`[data-a="${i}"]`).value;m.hs=h===''?'':String(Math.max(0,Math.min(99,parseInt(h,10)||0)));m.as=a===''?'':String(Math.max(0,Math.min(99,parseInt(a,10)||0)))});save();if(data.rounds[r].every(done)&&r<8){$('adminRound').value=String(r+1);renderAdmin();alert(`Wyniki zapisane. Kolejka ${r+2} jest gotowa do uzupełnienia.`)}else{renderAdmin();alert('Wyniki zapisane.')}};
 $('resetBtn').onclick=()=>{if(confirm('Na pewno usunąć wszystkie wyniki?')){data.rounds.forEach(g=>g.forEach(m=>{m.hs='';m.as=''}));save();alert('Wyniki wyczyszczone.')}};
-$('resetDrawBtn').onclick=()=>{if(confirm('Na pewno rozpocząć losowanie od początku?')){data.drawRemaining=data.players.map(p=>p.id);data.drawnOrder=[];wheelAngle=0;$('drawWinner').textContent='';save();alert('Losowanie zresetowane.')}};
+$('resetDrawBtn').onclick=()=>{if(confirm('Na pewno zresetować losowanie? Zostanie wyczyszczona kolejność losowania oraz wszystkie przypisane kluby i ich barwy. Uczestnicy i wyniki meczów pozostaną bez zmian.')){data.drawRemaining=data.players.map(p=>p.id);data.drawnOrder=[];data.players.forEach(p=>{p.club='';p.clubColor1='';p.clubColor2='';});pendingClubPlayer=null;wheelAngle=0;$('drawWinner').textContent='';$('clubModal').classList.add('hidden');save();alert('Losowanie zresetowane. Usunięto również przypisane kluby i ich barwy.')}};
 $('adminRound').dispatchEvent(new Event('change'));render();
 async function fetchCloudState(){
   const {data:row,error}=await sb.from('tournament_state').select('state,updated_at').eq('id',1).maybeSingle();
