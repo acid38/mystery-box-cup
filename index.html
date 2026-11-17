@@ -267,7 +267,12 @@ function renderTyper(){
   }
   form.classList.toggle('hidden',!open);
   if(open){
+    // Zachowaj wybory użytkownika, nawet gdy polling Supabase odświeży widok.
+    const previousPicks=[...picks.querySelectorAll('[data-pred-position]')].map(select=>select.value);
     picks.innerHTML=Array.from({length:data.players.length},(_,i)=>`<label class="typer-row"><b>${i+1}.</b><select data-pred-position="${i}" required><option value="">Wybierz gracza…</option>${data.players.map(p=>`<option value="${p.id}">${esc(p.name)}${p.club?' — '+esc(p.club):''}</option>`).join('')}</select></label>`).join('');
+    [...picks.querySelectorAll('[data-pred-position]')].forEach((select,i)=>{
+      if(previousPicks[i] && [...select.options].some(option=>option.value===previousPicks[i])) select.value=previousPicks[i];
+    });
   }
   const board=$('typerLeaderboard');
   if(!finished){
@@ -439,8 +444,13 @@ async function fetchCloudState(){
 async function fetchCloudPredictions(){
   const {data:rows,error}=await sb.from('predictions').select('id,name,order_ids,created_at').order('created_at',{ascending:true});
   if(error){console.warn('Predictions load:',error.message);return;}
-  data.typerPredictions=(rows||[]).map(r=>({id:r.id,name:r.name,order:r.order_ids,createdAt:r.created_at}));
-  renderTyper();
+  const nextPredictions=(rows||[]).map(r=>({id:r.id,name:r.name,order:r.order_ids,createdAt:r.created_at}));
+  const previousSignature=JSON.stringify(data.typerPredictions||[]);
+  const nextSignature=JSON.stringify(nextPredictions);
+  if(previousSignature!==nextSignature){
+    data.typerPredictions=nextPredictions;
+    renderTyper();
+  }
 }
 async function initCloud(){
   showCloudStatus('Łączenie z bazą online…',false);
