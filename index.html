@@ -103,6 +103,7 @@ table{width:100%;border-collapse:collapse;font-size:12px}th{text-align:left;colo
 <div class="panel" id="loginPanel"><h3>🔐 Dostęp administratora</h3><p class="small">Zaloguj się adresem e-mail i hasłem administratora Supabase.</p><div class="formrow"><input id="adminEmail" type="email" autocomplete="username" placeholder="Adres e-mail"><input id="adminPassword" type="password" autocomplete="current-password" placeholder="Hasło"><button class="primary" id="loginBtn">ZALOGUJ</button></div><p id="loginError" class="small" aria-live="polite"></p></div>
 <div id="adminPanel" class="hidden">
 <div class="notice">Jesteś zalogowany jako administrator. Zmiany synchronizują się z bazą online.<div id="cloudStatus" class="small" style="margin-top:6px">Łączenie z bazą…</div></div>
+<div class="panel"><h3>🎯 Zarządzanie typami</h3><p class="small">Lista wszystkich zapisanych typów. Możesz usuwać pojedyncze zgłoszenia testowe bez wpływu na wyniki turnieju.</p><div id="adminPredictions"><p class="small">Pobieranie typów…</p></div><button id="refreshPredictions" type="button">ODŚWIEŻ LISTĘ</button></div>
 <div class="panel"><h3>👥 Uczestnicy i kluby</h3><div id="playersEditor"></div><button class="primary" id="savePlayers">ZAPISZ UCZESTNIKÓW</button><p class="small">Nazwy klubów są opcjonalne. Możesz uzupełnić je po losowaniu mystery boxów.</p></div>
 <div class="panel"><h3>✏️ Wprowadzanie wyników</h3><div class="formrow"><select id="adminRound"></select><button class="primary" id="saveScores">ZAPISZ WYNIKI KOLEJKI</button></div><div id="scoreEditor"></div></div>
 <div class="panel"><h3>⚙️ Zarządzanie turniejem</h3><div class="formrow"><button id="logoutBtn">WYLOGUJ</button><button class="danger" id="resetBtn">RESETUJ WYNIKI</button><button class="danger" id="resetDrawBtn">RESETUJ LOSOWANIE</button></div><p class="small">Reset usuwa wyniki wszystkich spotkań, ale zachowuje uczestników i terminarz.</p></div>
@@ -236,6 +237,15 @@ $('goalsmatch').innerHTML=gm?`${esc(player(gm.home).name)} ${gm.hs}:${gm.as} ${e
 renderWheel();renderTyper();if(logged)renderAdmin();
 }
 function renderRound(){let r=+$('roundSelect').value;$('roundMatches').innerHTML=data.rounds[r].map(matchHTML).join('')}
+async function renderAdminPredictions(){
+  const target=$('adminPredictions');
+  if(!logged||!target)return;
+  target.innerHTML='<p class="small">Pobieranie typów…</p>';
+  const {data:rows,error}=await sb.from('predictions').select('id,name,order_ids,created_at').order('created_at',{ascending:true});
+  if(error){target.innerHTML=`<p class="small">Nie udało się pobrać typów: ${esc(error.message)}</p>`;return;}
+  if(!rows||!rows.length){target.innerHTML='<p class="small">Brak zapisanych typów.</p>';return;}
+  target.innerHTML=`<div style="overflow-x:auto"><table><thead><tr><th>NICK</th><th>DATA ZGŁOSZENIA</th><th>PRZEWIDYWANA KOLEJNOŚĆ</th><th>AKCJA</th></tr></thead><tbody>${rows.map(row=>`<tr><td><b>${esc(row.name)}</b></td><td class="small">${row.created_at?new Date(row.created_at).toLocaleString('pl-PL'):'—'}</td><td class="small">${(row.order_ids||[]).map((id,i)=>`${i+1}. ${esc(player(id).name)}`).join('<br>')}</td><td><button type="button" class="danger" data-delete-prediction="${esc(String(row.id))}">USUŃ</button></td></tr>`).join('')}</tbody></table></div>`;
+}
 function renderAdmin(){ $('playersEditor').innerHTML=data.players.map((p,i)=>`<div class="formrow"><input data-name="${i}" value="${esc(p.name)}" placeholder="Nazwa gracza ${i+1}"><input data-club="${i}" value="${esc(p.club)}" placeholder="Klub (opcjonalnie)"><span title="Pobrane barwy klubu" style="display:flex;align-items:center;gap:4px;padding:0 6px"><i style="width:15px;height:15px;background:${validHex(p.clubColor1)||'#344638'};border:1px solid #9aaa9d"></i><i style="width:15px;height:15px;background:${validHex(p.clubColor2)||'#344638'};border:1px solid #9aaa9d"></i></span></div>`).join('');
 let r=+$('adminRound').value;$('scoreEditor').innerHTML=data.rounds[r].map((m,i)=>`<div class="adminmatch"><span>${esc(player(m.home).name)} – ${esc(player(m.away).name)}</span><input type="number" min="0" max="99" data-h="${i}" value="${m.hs}" aria-label="Gole gospodarza"><input type="number" min="0" max="99" data-a="${i}" value="${m.as}" aria-label="Gole gościa"><span class="muted">${done(m)?'Zapisano':'—'}</span></div>`).join('')}
 
@@ -382,7 +392,7 @@ $('clubSavePlainBtn').addEventListener('click',()=>{
   finishClubSave(club,null);
 });
 document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
-document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['table','fixtures','stats','draw','typer','admin'].forEach(t=>$('view-'+t).classList.toggle('hidden',t!==b.dataset.tab));if(b.dataset.tab==='draw')renderWheel();if(b.dataset.tab==='typer')renderTyper();if(b.dataset.tab==='admin'&&logged)renderAdmin()}));
+document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['table','fixtures','stats','draw','typer','admin'].forEach(t=>$('view-'+t).classList.toggle('hidden',t!==b.dataset.tab));if(b.dataset.tab==='draw')renderWheel();if(b.dataset.tab==='typer')renderTyper();if(b.dataset.tab==='admin'&&logged){renderAdmin();renderAdminPredictions()}}));
 $('roundSelect').addEventListener('change',renderRound);$('adminRound').innerHTML=data.rounds.map((g,i)=>`<option value="${i}">Kolejka ${i+1}</option>`).join('');$('adminRound').value=currentRound();$('adminRound').addEventListener('change',renderAdmin);
 $('loginBtn').onclick=async()=>{
   $('loginBtn').disabled=true;$('loginError').textContent='Logowanie…';
@@ -395,8 +405,21 @@ $('loginBtn').onclick=async()=>{
   }
   logged=true;$('loginPanel').classList.add('hidden');$('adminPanel').classList.remove('hidden');
   if(!cloudStateExists)await save();
-  showCloudStatus('Zalogowano. Synchronizacja aktywna.',false);renderAdmin();$('loginBtn').disabled=false;
+  showCloudStatus('Zalogowano. Synchronizacja aktywna.',false);renderAdmin();renderAdminPredictions();$('loginBtn').disabled=false;
 };
+$('refreshPredictions').onclick=()=>renderAdminPredictions();
+$('adminPredictions').addEventListener('click',async e=>{
+  const button=e.target.closest('[data-delete-prediction]');
+  if(!button||!logged)return;
+  const id=button.getAttribute('data-delete-prediction');
+  if(!confirm('Usunąć ten typ? Tej operacji nie można cofnąć.'))return;
+  button.disabled=true;button.textContent='…';
+  const {error}=await sb.from('predictions').delete().eq('id',id);
+  if(error){alert('Nie udało się usunąć typu: '+error.message);button.disabled=false;button.textContent='USUŃ';return;}
+  await fetchCloudPredictions();
+  await renderAdminPredictions();
+  renderTyper();
+});
 $('logoutBtn').onclick=async()=>{
   await sb.auth.signOut();logged=false;$('adminPanel').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('adminPassword').value='';
 };
