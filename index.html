@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101812">
+<title>Mystery Box Cup — EA FC 26</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inter:wght@400;500;600;700;800&display=swap');
+:root{--bg:#0b110d;--panel:#131d16;--panel2:#1a281e;--line:#2b3c30;--green:#a6f36b;--green2:#5fba43;--muted:#91a194;--white:#f0f6ef;--gold:#f5cf69;--red:#ff7777}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -20%,#233b29 0%,var(--bg) 55%);color:var(--white);font-family:Inter,system-ui,sans-serif;min-height:100vh}
+.pixel{font-family:'Press Start 2P',monospace;letter-spacing:-.7px}.wrap{max-width:1120px;margin:auto;padding:22px 18px 60px}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:12px 0 24px;border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:14px}.ball{width:48px;height:48px;display:grid;place-items:center;background:var(--green);color:#10200f;font-size:24px;border:4px solid #d4ffac;box-shadow:4px 4px 0 #31522c}
+.brand h1{font-size:clamp(12px,2vw,18px);line-height:1.8;margin:0;color:var(--green)}.brand small{color:var(--muted);font-size:10px;font-weight:800;letter-spacing:2px}
+.live{font-size:10px;color:var(--green);border:1px solid #456b3e;padding:8px 10px;background:#172819}
+.hero{padding:30px 0 22px;text-align:center}.eyebrow{color:var(--green);font-size:10px;letter-spacing:3px;font-weight:800}.hero h2{font-size:clamp(20px,4vw,34px);line-height:1.6;margin:14px 0 8px}.hero p{color:var(--muted);margin:0;font-size:13px}
+.pitch{height:8px;margin:22px auto 0;max-width:500px;background:repeating-linear-gradient(90deg,#3b8c38 0 22px,#28672e 22px 44px);border:2px solid #7acb57;box-shadow:0 0 24px #70d34b22}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 20px}.tab,button{border:1px solid var(--line);background:var(--panel2);color:var(--white);padding:11px 14px;font-weight:800;font-size:12px;cursor:pointer}.tab.active{background:var(--green);color:#10200f;border-color:var(--green)}button.primary{background:var(--green);color:#10200f;border-color:var(--green)}button.danger{border-color:#713d3d;color:#ffaaaa;background:#2a1717}button:disabled{opacity:.45;cursor:not-allowed}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:18px}.stat{background:linear-gradient(145deg,var(--panel2),var(--panel));border:1px solid var(--line);padding:16px}.stat b{display:block;font-size:25px;color:var(--green);margin-bottom:7px}.stat span{font-size:10px;color:var(--muted);font-weight:800;letter-spacing:1px}
+.panel{background:#111a14;border:1px solid var(--line);padding:18px;margin-bottom:14px;box-shadow:5px 5px 0 #070b08}.panel h3{margin:0 0 15px;font-size:13px;letter-spacing:1px;color:var(--green);text-transform:uppercase}
+table{width:100%;border-collapse:collapse;font-size:12px}th{text-align:left;color:var(--muted);font-size:10px;letter-spacing:.5px;padding:11px 8px;border-bottom:1px solid var(--line)}td{padding:12px 8px;border-bottom:1px solid #223027}tr:last-child td{border-bottom:0}.rank{color:var(--green);font-weight:800}.champion-ball{display:inline-grid;place-items:center;width:25px;height:25px;color:#171307;background:linear-gradient(145deg,#fff2a6 0%,#f5c842 48%,#b87913 100%);border:2px solid #ffe99a;box-shadow:2px 2px 0 #7b4e0c,0 0 12px #f5cf6955;font-size:14px;line-height:1;text-shadow:1px 1px 0 #fff1a8;vertical-align:middle}.pts{font-weight:800;color:var(--green)}
+.badge{display:inline-block;background:#263a29;color:#b7f88d;padding:5px 7px;font-size:10px;font-weight:800}.muted{color:var(--muted)}.roundhead{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px}.roundhead select,input{background:#0c130e;color:var(--white);border:1px solid var(--line);padding:11px 12px;border-radius:0;min-width:0;font:inherit}
+.match{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px;padding:13px 10px;border-bottom:1px solid #223027}.match:last-child{border:0}.team{font-weight:800;font-size:12px}.team.away{text-align:right}.score{font-weight:900;color:var(--green);font-size:17px;white-space:nowrap}.pending{font-size:10px;color:var(--muted);border:1px dashed #405244;padding:6px 9px}
+.formrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.formrow input{flex:1;min-width:140px}.formrow button{white-space:nowrap}.hidden{display:none!important}.notice{padding:12px;border:1px solid #4c633e;background:#1b2b1b;color:#c8efb2;font-size:12px;line-height:1.6;margin-bottom:12px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}.small{font-size:11px;color:var(--muted);line-height:1.6}.adminmatch{display:grid;grid-template-columns:1fr 65px 65px auto;gap:7px;align-items:center;padding:9px 0;border-bottom:1px solid #26342a;font-size:11px}.adminmatch input{width:100%;text-align:center;padding:8px}.adminmatch button{padding:8px}.wheel-wrap{position:relative;width:min(82vw,430px);margin:22px auto 8px;aspect-ratio:1}
+#wheelCanvas{display:block;width:100%;height:100%;border-radius:50%;filter:drop-shadow(0 8px 0 #060a07) drop-shadow(0 0 18px #9af05b22)}
+.wheel-pointer{position:absolute;z-index:2;left:50%;top:-9px;transform:translateX(-50%);width:0;height:0;border-left:17px solid transparent;border-right:17px solid transparent;border-top:35px solid var(--gold);filter:drop-shadow(2px 3px 0 #4b350c)}
+.drawn-list{max-width:560px;margin:0 auto;padding-left:28px;text-align:left}
+.drawn-list li{padding:9px 8px;border-bottom:1px solid #26342a;font-size:12px}
+.drawn-list li::marker{color:var(--green);font-weight:800}.typer-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.typer-row{display:grid;grid-template-columns:34px 1fr;align-items:center;gap:8px;background:#17231a;border:1px solid #2b3c30;padding:8px}.typer-row b{color:var(--gold);font-size:12px}.typer-row select{width:100%;min-width:0;background:#0c130e;color:var(--white);border:1px solid var(--line);padding:10px;font:inherit;font-size:12px}.typer-form input{width:100%;max-width:420px}.typer-score{font-weight:900;color:var(--green)}@media(max-width:560px){.typer-grid{grid-template-columns:1fr}}
+.club-modal{position:fixed;inset:0;z-index:50;background:#000c;display:grid;place-items:center;padding:16px}.club-dialog{width:min(100%,440px);background:#152219;border:2px solid var(--green);box-shadow:8px 8px 0 #050805;padding:26px;text-align:center}.club-dialog h3{font-size:15px;color:var(--gold);line-height:1.7}.club-dialog input{width:100%;padding:13px;margin:12px 0;background:#0c130e;color:var(--white);border:1px solid var(--green);font:inherit}.club-dialog button{width:100%;margin-top:8px}.club-error{color:#ffaaaa;font-size:12px;min-height:18px}.footer{text-align:center;color:#637568;font-size:10px;margin-top:28px;line-height:1.8}
+@media(max-width:700px){.cards{grid-template-columns:repeat(2,1fr)}.grid2{grid-template-columns:1fr}.wrap{padding:14px 12px 40px}.panel{padding:13px}.hide-mobile{display:none}.match{gap:5px}.team{font-size:11px}.adminmatch{grid-template-columns:1fr 48px 48px auto}.tab{padding:10px;font-size:11px}}
+</style>
+</head>
+<body><div class="wrap">
+<header><div class="brand"><div class="ball">⚽</div><div><h1 class="pixel">MYSTERY BOX CUP</h1><small>EA FC 26 · SEZON 2026</small></div></div><div class="live">● TURNIEJ</div></header>
+<section class="hero"><div class="eyebrow pixel">10 PLAYERS / 45 MATCHES</div><h2 class="pixel">WALKA O MISTRZOSTWO</h2><p>Jeden turniej. Dziewięć kolejek. Jeden zwycięzca.</p><div class="pitch"></div></section>
+<nav class="tabs">
+<button class="tab active" data-tab="table">🏆 TABELA</button><button class="tab" data-tab="fixtures">📅 TERMINARZ</button><button class="tab" data-tab="stats">📊 STATYSTYKI</button><button class="tab" data-tab="draw">🎡 LOSOWANIE</button><button class="tab" data-tab="typer">🎯 TYPER</button><button class="tab" data-tab="admin">🔒 ADMINISTRATOR</button>
+</nav>
+<div class="cards"><div class="stat"><b id="played">0/45</b><span>ROZEGRANE MECZE</span></div><div class="stat"><b id="roundCount">0/9</b><span>KOLEJKI ZAKOŃCZONE</span></div><div class="stat"><b id="playersCount">10</b><span>UCZESTNICY</span></div><div class="stat"><b id="leader">—</b><span>LIDER</span></div></div>
+<main>
+<section id="view-table">
+<div class="panel"><h3>🏆 Klasyfikacja generalna</h3><div style="overflow-x:auto"><table><thead><tr><th>#</th><th>GRACZ / KLUB</th><th>M</th><th>W</th><th>R</th><th>P</th><th>BR</th><th>+/-</th><th>PKT</th></tr></thead><tbody id="standings"></tbody></table></div><p class="small">Kolejność: punkty → bezpośredni mecz → bilans bramkowy → gole strzelone.</p></div>
+<div class="panel"><h3>⚡ Najbliższa kolejka</h3><div id="nextMatches"></div></div>
+</section>
+<section id="view-fixtures" class="hidden">
+<div class="panel"><div class="roundhead"><h3 style="margin:0">📅 Terminarz spotkań</h3><select id="roundSelect" aria-label="Wybierz kolejkę"></select></div><div id="roundMatches"></div></div>
+</section>
+<section id="view-stats" class="hidden"><div class="grid2">
+<div class="panel"><h3>🚀 Najlepsza ofensywa</h3><div id="attack" class="small">Brak rozegranych spotkań.</div></div>
+<div class="panel"><h3>🧤 Najlepsza defensywa</h3><div id="defense" class="small">Brak rozegranych spotkań.</div></div>
+<div class="panel"><h3>🏅 Najwięcej zwycięstw</h3><div id="wins" class="small">Brak rozegranych spotkań.</div></div>
+<div class="panel"><h3>💥 Najwyższe zwycięstwo</h3><div id="biggest" class="small">Brak rozegranych spotkań.</div></div>
+<div class="panel"><h3>🥅 Najwięcej goli w meczu</h3><div id="goalsmatch" class="small">Brak rozegranych spotkań.</div></div>
+</div></section>
+<section id="view-draw" class="hidden">
+<div class="panel" style="text-align:center">
+<h3>🎡 Losowanie kolejności wyboru mystery boxów</h3>
+<p class="small">Zakreć kołem, aby wylosować osobę wybierającą kolejny mystery box. Wylosowany uczestnik znika z koła.</p>
+<div class="wheel-wrap">
+<div class="wheel-pointer" aria-hidden="true"></div>
+<canvas id="wheelCanvas" width="600" height="600" aria-label="Koło fortuny z uczestnikami"></canvas>
+</div>
+<div id="drawStatus" class="notice" style="max-width:520px;margin:14px auto">Na kole pozostało 10 uczestników. Powodzenia!</div>
+<button class="primary" id="spinBtn" style="min-width:190px">🎡 LOSUJ OSOBĘ</button>
+<div id="drawWinner" class="small" style="margin-top:14px;min-height:22px"></div>
+</div>
+<div class="panel"><h3>📋 Kolejność wylosowanych</h3><ol id="drawnList" class="drawn-list"><li class="muted">Losowanie jeszcze się nie rozpoczęło.</li></ol></div>
+</section>
+
+<section id="view-typer" class="hidden">
+<div class="panel">
+  <h3>🎯 Typuj końcową tabelę</h3>
+  <p class="small">Po zakończeniu losowania i przed pierwszym meczem każdy chętny może zgłosić swój typ. Ustaw wszystkich 10 uczestników w kolejności, w jakiej Twoim zdaniem zakończą turniej.</p>
+  <div id="typerStatus" class="notice">Sprawdzam dostępność typowania…</div>
+  <form id="typerForm" class="typer-form">
+    <label class="small" for="typerName" style="display:block;margin-bottom:6px">TWÓJ NICK / IMIĘ</label>
+    <input id="typerName" maxlength="32" autocomplete="nickname" placeholder="Np. Adam" required>
+    <h3 style="margin-top:20px">Przewidywana kolejność</h3>
+    <div id="typerPicks" class="typer-grid"></div>
+    <button class="primary" id="submitTyper" type="submit" style="margin-top:14px">ZAPISZ MÓJ TYP</button>
+    <p id="typerError" class="small" aria-live="polite"></p>
+  </form>
+</div>
+<div class="panel">
+  <h3>🏅 Klasyfikacja typerów</h3>
+  <div id="typerLeaderboard" class="small">Tabela typerów pojawi się po rozegraniu wszystkich 45 spotkań.</div>
+</div>
+<div class="panel">
+  <h3>📐 Zasady punktacji</h3>
+  <div style="overflow-x:auto"><table><thead><tr><th>Różnica miejsc</th><th>Punkty</th></tr></thead><tbody>
+    <tr><td>Idealne miejsce</td><td class="pts">+5</td></tr>
+    <tr><td>Pomyłka o 1–2 miejsca</td><td class="pts">+1</td></tr>
+    <tr><td>Pomyłka o 3–4 miejsca</td><td>0</td></tr>
+    <tr><td>Pomyłka o 5–6 miejsc</td><td style="color:#ffaaaa">−1</td></tr>
+    <tr><td>Pomyłka o 7 lub więcej miejsc</td><td style="color:#ff7777">−3</td></tr>
+  </tbody></table></div>
+  <p class="small">Punkty są sumowane dla wszystkich 10 uczestników. Wygrywa typer z najwyższym wynikiem.</p>
+</div>
+</section>
+<section id="view-admin" class="hidden">
+<div class="panel" id="loginPanel"><h3>🔐 Dostęp administratora</h3><p class="small">Zaloguj się adresem e-mail i hasłem administratora Supabase.</p><div class="formrow"><input id="adminEmail" type="email" autocomplete="username" placeholder="Adres e-mail"><input id="adminPassword" type="password" autocomplete="current-password" placeholder="Hasło"><button class="primary" id="loginBtn">ZALOGUJ</button></div><p id="loginError" class="small" aria-live="polite"></p></div>
+<div id="adminPanel" class="hidden">
+<div class="notice">Jesteś zalogowany jako administrator. Zmiany synchronizują się z bazą online.<div id="cloudStatus" class="small" style="margin-top:6px">Łączenie z bazą…</div></div>
+<div class="panel"><h3>👥 Uczestnicy i kluby</h3><div id="playersEditor"></div><button class="primary" id="savePlayers">ZAPISZ UCZESTNIKÓW</button><p class="small">Nazwy klubów są opcjonalne. Możesz uzupełnić je po losowaniu mystery boxów.</p></div>
+<div class="panel"><h3>✏️ Wprowadzanie wyników</h3><div class="formrow"><select id="adminRound"></select><button class="primary" id="saveScores">ZAPISZ WYNIKI KOLEJKI</button></div><div id="scoreEditor"></div></div>
+<div class="panel"><h3>⚙️ Zarządzanie turniejem</h3><div class="formrow"><button id="logoutBtn">WYLOGUJ</button><button class="danger" id="resetBtn">RESETUJ WYNIKI</button><button class="danger" id="resetDrawBtn">RESETUJ LOSOWANIE</button></div><p class="small">Reset usuwa wyniki wszystkich spotkań, ale zachowuje uczestników i terminarz.</p></div>
+</div></section>
+</main><div id="clubModal" class="club-modal hidden" role="dialog" aria-modal="true" aria-labelledby="clubModalTitle"><div class="club-dialog"><div class="pixel" style="color:var(--green);font-size:10px">🎁 MYSTERY BOX</div><h3 id="clubModalTitle">WYLOSOWANO GRACZA!</h3><p id="clubModalPlayer" style="font-size:20px;font-weight:800"></p><p class="small">Wpisz klub z otwartego mystery boxa. Zostanie automatycznie przypisany do uczestnika w panelu administratora, tabeli i terminarzu.</p><form id="clubForm"><input id="clubInput" type="text" maxlength="80" autocomplete="off" placeholder="Np. Real Madryt" required><div id="clubError" class="club-error" aria-live="polite"></div><button class="primary" id="clubSaveBtn" type="submit">⚽ POBIERZ BARWY I ZAPISZ KLUB</button><button id="clubSavePlainBtn" type="button" class="hidden">ZAPISZ KLUB BEZ BARW</button><p class="small">Barwy pobierane są z internetowej bazy TheSportsDB.</p></form></div></div><div class="footer pixel">MYSTERY BOX CUP · EA FC 26<br><span style="font-family:Inter">RETRO FOOTBALL EXPERIENCE</span></div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPABASE_URL="https://ssiyvjfyuzcsagqoveiz.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY="sb_publishable_W98z7v8DVGl-gN85uc5pFw_ifUhhysO";
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
+let cloudReady=false,cloudStateExists=false,cloudSaveQueue=Promise.resolve(),lastRemoteState="";
+const KEY='mbc_demo_v1'; 
+const initialPlayers=Array.from({length:10},(_,i)=>({id:i,name:`Gracz ${i+1}`,club:''}));
+function makeFixtures(ids){let a=[...ids],out=[];for(let r=0;r<9;r++){let games=[];for(let i=0;i<5;i++){let x=a[i],y=a[9-i];if((r+i)%2===0)[x,y]=[y,x];games.push({home:x,away:y,hs:'',as:''})}out.push(games);a=[a[0],a[9],...a.slice(1,9).slice(0,8)];}return out}
+function fresh(){return {players:initialPlayers,rounds:makeFixtures(initialPlayers.map(p=>p.id)),typerPredictions:[]}}
+let data;try{data=JSON.parse(localStorage.getItem(KEY))||fresh()}catch{data=fresh()}
+if(!Array.isArray(data.drawRemaining))data.drawRemaining=data.players.map(p=>p.id);
+if(!Array.isArray(data.drawnOrder))data.drawnOrder=[];
+if(!Array.isArray(data.typerPredictions))data.typerPredictions=[];
+data.players.forEach(p=>{if(typeof p.clubColor1!=='string')p.clubColor1='';if(typeof p.clubColor2!=='string')p.clubColor2='';});
+let logged=false, wheelAngle=0, wheelSpinning=false, pendingClubPlayer=null;
+const $=id=>document.getElementById(id), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const SPORTSDB_URL='https://www.thesportsdb.com/api/v1/json/123/searchteams.php?t=';
+function validHex(value){return /^#[0-9a-f]{6}$/i.test(String(value||''))?String(value):''}
+function normalizeClubName(value){
+  return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .toLowerCase().replace(/&/g,'and').replace(/[^a-z0-9]+/g,' ').trim()
+    .replace(/\b(fc|cf|sc|afc|cfc|ac|as|ss|sv|fk|ks|club|football|soccer)\b/g,' ')
+    .replace(/\s+/g,' ').trim();
+}
+const CLUB_ALIASES={
+  'real madryt':'Real Madrid','real madrid':'Real Madrid',
+  'barcelona':'FC Barcelona','fc barcelona':'FC Barcelona',
+  'atletico madryt':'Atletico Madrid','atletico madrid':'Atletico Madrid',
+  'manchester united':'Manchester United','man united':'Manchester United',
+  'manchester city':'Manchester City',
+  'bayern monachium':'Bayern Munich','bayern munich':'Bayern Munich',
+  'borussia dortmund':'Borussia Dortmund',
+  'inter mediolan':'Inter Milan','inter milan':'Inter Milan',
+  'ac milan':'AC Milan','milan':'AC Milan',
+  'juventus turyn':'Juventus','juventus':'Juventus',
+  'napoli':'Napoli','ssc napoli':'Napoli',
+  'as roma':'AS Roma','roma':'AS Roma',
+  'paryz saint germain':'Paris Saint-Germain','paris saint germain':'Paris Saint-Germain',
+  'olympique marsylia':'Olympique de Marseille',
+  'olympique lyon':'Olympique Lyonnais',
+  'ajax amsterdam':'Ajax','ajax':'Ajax',
+  'psv eindhoven':'PSV','psv':'PSV',
+  'fc porto':'FC Porto','porto':'FC Porto',
+  'sporting lizbona':'Sporting CP','sporting cp':'Sporting CP',
+  'benfica':'SL Benfica','sl benfica':'SL Benfica',
+  'arsenal':'Arsenal','chelsea':'Chelsea','liverpool':'Liverpool',
+  'tottenham':'Tottenham Hotspur','tottenham hotspur':'Tottenham Hotspur',
+  'newcastle':'Newcastle United','west ham':'West Ham United',
+  'manchester united fc':'Manchester United'
+};
+function clubSearchCandidates(input){
+  const raw=String(input||'').trim();
+  const normalized=normalizeClubName(raw);
+  const mapped=CLUB_ALIASES[normalized];
+  const stripped=raw.replace(/^(fc|cf|sc|afc|cfc|ac|as|ss|sv|fk|ks)\s+/i,'').trim();
+  return [...new Set([raw,mapped,stripped].filter(Boolean))];
+}
+function teamMatchScore(team,input){
+  const target=normalizeClubName(input);
+  const names=[team.strTeam,team.strTeamAlternate,team.strTeamShort].filter(Boolean).map(normalizeClubName);
+  if(names.includes(target))return 100;
+  if(names.some(n=>n&& (n.includes(target)||target.includes(n))))return 75;
+  return 0;
+}
+async function lookupClubColors(club){
+  const candidates=clubSearchCandidates(club);
+  let teamsFound=[];
+  for(const candidate of candidates){
+    const response=await fetch(SPORTSDB_URL+encodeURIComponent(candidate),{headers:{'Accept':'application/json'}});
+    if(!response.ok)throw new Error(response.status===429?'Limit zapytań do bazy został chwilowo osiągnięty.':'Nie udało się połączyć z bazą klubów.');
+    const payload=await response.json();
+    const teams=Array.isArray(payload.teams)?payload.teams:[];
+    if(teams.length){teamsFound=teams;break;}
+  }
+  if(!teamsFound.length)throw new Error('Nie znaleziono klubu w bazie TheSportsDB. Spróbuj wpisać jego angielską nazwę lub skrót.');
+  const ranked=teamsFound.map(t=>({team:t,score:teamMatchScore(t,club)})).sort((a,b)=>b.score-a.score);
+  const team=ranked[0].team;
+  const color1=validHex(team.strColour1),color2=validHex(team.strColour2),color3=validHex(team.strColour3);
+  if(!color1&&!color2&&!color3)throw new Error('Klub znaleziono, ale baza nie udostępnia jego barw.');
+  return {color1:color1||color2||color3,color2:color2||color3||color1,matchedName:team.strTeam||club};
+}
+function coloredName(p){
+  const color=validHex(p.clubColor1);
+  const accent=validHex(p.clubColor2);
+  return `<b${color?` style="color:${color};text-shadow:0 0 9px ${color}55"`:''}>${esc(p.name)}</b>`;
+}
+function setClubColors(p,colors){p.clubColor1=colors.color1;p.clubColor2=colors.color2;p.clubSourceName=colors.matchedName||p.club;}
+
+function save(){
+  localStorage.setItem(KEY,JSON.stringify(data));
+  render();
+  if(logged&&cloudReady){
+    const snapshot=JSON.parse(JSON.stringify(data));
+    cloudSaveQueue=cloudSaveQueue.then(async()=>{
+      const {error}=await sb.from('tournament_state').upsert({id:1,state:snapshot,updated_at:new Date().toISOString()});
+      if(error){console.error('Supabase save failed:',error);showCloudStatus('Nie udało się zsynchronizować zmian: '+error.message,true);}
+      else{cloudStateExists=true;lastRemoteState=JSON.stringify(snapshot);showCloudStatus('Dane turnieju są zsynchronizowane.',false);}
+    }).catch(err=>{console.error(err);showCloudStatus('Błąd synchronizacji z bazą.',true);});
+  }
+}
+function showCloudStatus(message,isError){
+  const el=document.getElementById('cloudStatus');
+  if(el){el.textContent=message;el.style.color=isError?'#ffaaaa':'#b7f88d';}
+}
+function player(id){return data.players.find(p=>p.id===id)||{name:'Usunięty gracz',club:''}}
+function done(m){return m.hs!==''&&m.as!==''&&Number.isInteger(+m.hs)&&Number.isInteger(+m.as)&&+m.hs>=0&&+m.as>=0}
+function allMatches(){return data.rounds.flatMap((games,r)=>games.map((m,i)=>({...m,r,i})))}
+function stats(){return data.players.map(p=>{let s={...p,m:0,w:0,d:0,l:0,gf:0,ga:0,pts:0};allMatches().filter(done).forEach(m=>{if(m.home!==p.id&&m.away!==p.id)return;s.m++;let own=+(m.home===p.id?m.hs:m.as),opp=+(m.home===p.id?m.as:m.hs);s.gf+=own;s.ga+=opp;if(own>opp){s.w++;s.pts+=3}else if(own===opp){s.d++;s.pts++}else s.l++});s.diff=s.gf-s.ga;return s})}
+function h2h(a,b){let m=allMatches().find(x=>done(x)&&((x.home===a&&x.away===b)||(x.home===b&&x.away===a)));if(!m)return 0;let sa=m.home===a?+m.hs:+m.as,sb=m.home===a?+m.as:+m.hs;return sa>sb?1:sa<sb?-1:0}
+function sorted(){return stats().sort((a,b)=>b.pts-a.pts||h2h(b.id,a.id)||b.diff-a.diff||b.gf-a.gf||a.name.localeCompare(b.name,'pl'))}
+function currentRound(){let idx=data.rounds.findIndex(g=>g.some(m=>!done(m)));return idx<0?8:idx}
+function matchHTML(m){let h=player(m.home),a=player(m.away);return `<div class="match"><div class="team">${coloredName(h)}${h.club?`<div class="muted" style="font-size:10px;margin-top:4px">${esc(h.club)}</div>`:''}</div><div>${done(m)?`<div class="score">${m.hs} : ${m.as}</div>`:`<span class="pending">VS</span>`}</div><div class="team away">${coloredName(a)}${a.club?`<div class="muted" style="font-size:10px;margin-top:4px">${esc(a.club)}</div>`:''}</div></div>`}
+function render(){let matches=allMatches(),played=matches.filter(done).length,completed=data.rounds.filter(g=>g.every(done)).length,table=sorted(),tournamentFinished=played===45;$('played').textContent=`${played}/45`;$('roundCount').textContent=`${completed}/9`;$('playersCount').textContent=data.players.length;$('leader').textContent=played?table[0].name:'—';
+$('standings').innerHTML=table.map((p,i)=>`<tr><td class="rank">${tournamentFinished&&i===0?'<span class="champion-ball" title="Mistrz Mystery Box Cup">⚽</span>':String(i+1).padStart(2,'0')}</td><td>${coloredName(p)}${p.club?`<div class="muted" style="font-size:10px;margin-top:3px">${esc(p.club)}</div>`:''}</td><td>${p.m}</td><td>${p.w}</td><td>${p.d}</td><td>${p.l}</td><td>${p.gf}:${p.ga}</td><td>${p.diff>0?'+':''}${p.diff}</td><td class="pts">${p.pts}</td></tr>`).join('');
+let cr=currentRound();$('nextMatches').innerHTML=data.rounds[cr].map(matchHTML).join('')+(played===45?'<div class="notice">Turniej zakończony! Gratulacje dla mistrza!</div>':'');
+$('roundSelect').innerHTML=data.rounds.map((g,i)=>`<option value="${i}">Kolejka ${i+1}${g.every(done)?' ✓':''}</option>`).join('');$('roundSelect').value=cr;renderRound();
+let attack=[...table].sort((a,b)=>b.gf-a.gf),defense=[...table].sort((a,b)=>a.ga-b.ga),wins=[...table].sort((a,b)=>b.w-a.w);
+$('attack').innerHTML=played?attack.slice(0,3).map((p,i)=>`${i+1}. ${coloredName(p)} — ${p.gf} goli`).join('<br>'):'Brak rozegranych spotkań.';
+$('defense').innerHTML=played?defense.slice(0,3).map((p,i)=>`${i+1}. ${coloredName(p)} — ${p.ga} straconych`).join('<br>'):'Brak rozegranych spotkań.';
+$('wins').innerHTML=played?wins.slice(0,3).map((p,i)=>`${i+1}. ${coloredName(p)} — ${p.w} zwycięstw`).join('<br>'):'Brak rozegranych spotkań.';
+let completedMatches=matches.filter(done),big=completedMatches.filter(m=>m.hs!==m.as).sort((a,b)=>Math.abs(b.hs-b.as)-Math.abs(a.hs-a.as))[0],gm=completedMatches.sort((a,b)=>(+b.hs + +b.as)-(+a.hs + +a.as))[0];
+$('biggest').innerHTML=big?`${esc(player(big.home).name)} ${big.hs}:${big.as} ${esc(player(big.away).name)}`:'Brak rozstrzygniętych meczów.';
+$('goalsmatch').innerHTML=gm?`${esc(player(gm.home).name)} ${gm.hs}:${gm.as} ${esc(player(gm.away).name)} — ${+gm.hs + +gm.as} goli`:'Brak rozegranych spotkań.';
+renderWheel();renderTyper();if(logged)renderAdmin();
+}
+function renderRound(){let r=+$('roundSelect').value;$('roundMatches').innerHTML=data.rounds[r].map(matchHTML).join('')}
+function renderAdmin(){ $('playersEditor').innerHTML=data.players.map((p,i)=>`<div class="formrow"><input data-name="${i}" value="${esc(p.name)}" placeholder="Nazwa gracza ${i+1}"><input data-club="${i}" value="${esc(p.club)}" placeholder="Klub (opcjonalnie)"><span title="Pobrane barwy klubu" style="display:flex;align-items:center;gap:4px;padding:0 6px"><i style="width:15px;height:15px;background:${validHex(p.clubColor1)||'#344638'};border:1px solid #9aaa9d"></i><i style="width:15px;height:15px;background:${validHex(p.clubColor2)||'#344638'};border:1px solid #9aaa9d"></i></span></div>`).join('');
+let r=+$('adminRound').value;$('scoreEditor').innerHTML=data.rounds[r].map((m,i)=>`<div class="adminmatch"><span>${esc(player(m.home).name)} – ${esc(player(m.away).name)}</span><input type="number" min="0" max="99" data-h="${i}" value="${m.hs}" aria-label="Gole gospodarza"><input type="number" min="0" max="99" data-a="${i}" value="${m.as}" aria-label="Gole gościa"><span class="muted">${done(m)?'Zapisano':'—'}</span></div>`).join('')}
+
+
+function tournamentPlayedCount(){return allMatches().filter(done).length}
+function drawIsComplete(){return (data.drawRemaining||[]).length===0&&(data.drawnOrder||[]).length===data.players.length}
+function typerWindowOpen(){return drawIsComplete()&&tournamentPlayedCount()===0&&data.players.length===10}
+function scoreTyperPrediction(prediction,actualOrder){
+  const actualPosition=new Map(actualOrder.map((p,i)=>[p.id,i+1]));
+  return prediction.order.reduce((total,id,index)=>{
+    const actual=actualPosition.get(id);
+    if(!actual)return total;
+    const difference=Math.abs((index+1)-actual);
+    return total+(difference===0?5:difference<=2?1:difference<=4?0:difference<=6?-1:-3);
+  },0);
+}
+function renderTyper(){
+  const open=typerWindowOpen(),finished=tournamentPlayedCount()===45;
+  const form=$('typerForm'),picks=$('typerPicks');
+  if(!form||!picks)return;
+  if(!drawIsComplete()){
+    $('typerStatus').textContent='Typowanie zostanie otwarte po wylosowaniu wszystkich uczestników i przypisaniu im klubów.';
+  }else if(finished){
+    $('typerStatus').textContent='Turniej został zakończony. Typowanie jest zamknięte.';
+  }else if(tournamentPlayedCount()>0){
+    $('typerStatus').textContent='Pierwszy mecz został już rozegrany. Okno typowania jest zamknięte.';
+  }else{
+    $('typerStatus').textContent=`Typowanie jest otwarte! Możesz zgłosić swój typ przed pierwszą kolejką. Zgłoszono już ${data.typerPredictions.length} typów.`;
+  }
+  form.classList.toggle('hidden',!open);
+  if(open){
+    picks.innerHTML=Array.from({length:data.players.length},(_,i)=>`<label class="typer-row"><b>${i+1}.</b><select data-pred-position="${i}" required><option value="">Wybierz gracza…</option>${data.players.map(p=>`<option value="${p.id}">${esc(p.name)}${p.club?' — '+esc(p.club):''}</option>`).join('')}</select></label>`).join('');
+  }
+  const board=$('typerLeaderboard');
+  if(!finished){
+    board.innerHTML=`<div class="notice">Tabela typerów zostanie opublikowana po zakończeniu wszystkich 45 meczów. Aktualnie zapisanych typów: <b>${data.typerPredictions.length}</b>.</div>`;
+  }else if(!data.typerPredictions.length){
+    board.textContent='Nikt nie zgłosił typu przed rozpoczęciem turnieju.';
+  }else{
+    const actual=sorted();
+    const ranked=data.typerPredictions.map(p=>({...p,points:scoreTyperPrediction(p,actual)})).sort((a,b)=>b.points-a.points||a.name.localeCompare(b.name,'pl'));
+    board.innerHTML=`<div style="overflow-x:auto"><table><thead><tr><th>#</th><th>TYPER</th><th>PKT</th><th>TWÓJ TYP (1–10)</th></tr></thead><tbody>${ranked.map((p,i)=>`<tr><td class="rank">${String(i+1).padStart(2,'0')}</td><td><b>${esc(p.name)}</b></td><td class="typer-score">${p.points>0?'+':''}${p.points}</td><td>${p.order.map((id,j)=>`${j+1}. ${esc(player(id).name)}`).join('<br>')}</td></tr>`).join('')}</tbody></table></div>`;
+  }
+}
+$('typerForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  if(!typerWindowOpen())return;
+  const name=$('typerName').value.trim();
+  const selects=[...document.querySelectorAll('[data-pred-position]')];
+  const order=selects.map(s=>s.value);
+  if(!name){$('typerError').textContent='Wpisz swój nick lub imię.';return;}
+  if(order.some(v=>v==='')){$('typerError').textContent='Uzupełnij wszystkie 10 miejsc.';return;}
+  if(new Set(order).size!==data.players.length){$('typerError').textContent='Każdy uczestnik może wystąpić tylko raz.';return;}
+  if(order.length!==data.players.length){$('typerError').textContent='Liczba typowanych miejsc nie zgadza się z liczbą uczestników.';return;}
+  if(data.typerPredictions.some(p=>p.name.toLocaleLowerCase('pl')===name.toLocaleLowerCase('pl'))){$('typerError').textContent='Typ o takim nicku został już zapisany.';return;}
+  $('submitTyper').disabled=true;
+  sb.from('predictions').insert({name,order_ids:order}).select('id,name,order_ids,created_at').single().then(({data:row,error})=>{
+    $('submitTyper').disabled=false;
+    if(error){$('typerError').textContent=error.code==='23505'?'Typ o takim nicku został już zapisany.':`Nie udało się zapisać typu: ${error.message}`;return;}
+    data.typerPredictions.push({id:row.id,name:row.name,order:row.order_ids,createdAt:row.created_at});
+    $('typerName').value='';$('typerError').textContent='Twój typ został zapisany online! Nie będzie można go później zmienić.';
+    renderTyper();
+  });
+});
+
+function drawWheel(){
+ const canvas=$('wheelCanvas');if(!canvas)return;const ctx=canvas.getContext('2d'),size=600,cx=300,cy=300,r=284;
+ ctx.clearRect(0,0,size,size);
+ const ids=data.drawRemaining||[],n=ids.length;
+ if(!n){ctx.fillStyle='#18251b';ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fill();ctx.fillStyle='#a6f36b';ctx.font='18px "Press Start 2P"';ctx.textAlign='center';ctx.fillText('GOTOWE!',cx,cy);return}
+ const colors=['#397b38','#254f31','#6b8f37','#345d45','#8a7130','#426d2e','#315b66','#596d32','#704b32','#3c754e'];
+ const slice=Math.PI*2/n;
+ for(let i=0;i<n;i++){
+  const start=wheelAngle+i*slice,end=start+slice;
+  ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,start,end);ctx.closePath();ctx.fillStyle=colors[i%colors.length];ctx.fill();
+  ctx.strokeStyle='#d4ffac';ctx.lineWidth=3;ctx.stroke();
+  ctx.save();ctx.translate(cx,cy);ctx.rotate(start+slice/2);
+  ctx.textAlign='right';ctx.textBaseline='middle';ctx.fillStyle='#fff';ctx.shadowColor='#000';ctx.shadowBlur=4;
+  const name=player(ids[i]).name;let font=n>8?17:n>5?20:24;ctx.font=`bold ${font}px Inter, sans-serif`;
+  let label=name.length>17?name.slice(0,16)+'…':name;ctx.fillText(label,r-24,0,Math.min(205,r*.72));ctx.restore();
+ }
+ ctx.beginPath();ctx.arc(cx,cy,39,0,Math.PI*2);ctx.fillStyle='#a6f36b';ctx.fill();ctx.strokeStyle='#f0f6ef';ctx.lineWidth=6;ctx.stroke();
+ ctx.fillStyle='#10200f';ctx.font='bold 26px Inter';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillText('⚽',cx,cy+1);
+}
+function renderWheel(){
+ if(wheelSpinning)return;
+ drawWheel();
+ const remaining=data.drawRemaining||[],drawn=data.drawnOrder||[];
+ $('drawStatus').textContent=remaining.length?`Na kole pozostało ${remaining.length} ${remaining.length===1?'uczestnik':'uczestników'}.`:'Wszyscy uczestnicy zostali wylosowani! Kolejność wyboru mystery boxów jest kompletna.';
+ $('spinBtn').disabled=wheelSpinning||remaining.length===0||pendingClubPlayer!==null;
+ $('spinBtn').textContent=remaining.length?'🎡 LOSUJ OSOBĘ':'LOSOWANIE ZAKOŃCZONE';
+ $('drawnList').innerHTML=drawn.length?drawn.map((id,i)=>`<li><b>${esc(player(id).name)}</b>${player(id).club?` <span class="muted">(${esc(player(id).club)})</span>`:''}</li>`).join(''):'<li class="muted">Losowanie jeszcze się nie rozpoczęło.</li>';
+}
+$('spinBtn').onclick=()=>{
+ const ids=data.drawRemaining||[];if(wheelSpinning||pendingClubPlayer!==null||!ids.length)return;
+ wheelSpinning=true;$('spinBtn').disabled=true;$('drawWinner').textContent='Koło się kręci…';
+ const slice=Math.PI*2/ids.length;
+ const winnerIndex=Math.floor(Math.random()*ids.length);
+ const desired=(((-Math.PI/2)-((winnerIndex+.5)*slice))%(Math.PI*2)+Math.PI*2)%(Math.PI*2);
+ const current=((wheelAngle%(Math.PI*2))+Math.PI*2)%(Math.PI*2);
+ const extraTurns=6+Math.floor(Math.random()*3);
+ const delta=extraTurns*Math.PI*2+((desired-current+Math.PI*2)%(Math.PI*2));
+ const start=wheelAngle,duration=4800,started=performance.now();
+ function frame(now){
+  const t=Math.min(1,(now-started)/duration),ease=1-Math.pow(1-t,4);
+  wheelAngle=start+delta*ease;drawWheel();
+  if(t<1){requestAnimationFrame(frame);return}
+  const winner=ids[winnerIndex];data.drawRemaining=ids.filter(id=>id!==winner);data.drawnOrder.push(winner);
+  wheelSpinning=false;pendingClubPlayer=winner;save();$('clubModalPlayer').textContent=player(winner).name;$('clubInput').value=player(winner).club||'';$('clubError').textContent='';$('clubError').style.color='#ffaaaa';$('clubSaveBtn').disabled=false;$('clubSavePlainBtn').classList.add('hidden');$('clubModal').classList.remove('hidden');$('clubInput').focus();$('drawWinner').innerHTML=`<span class="badge">WYLOSOWANO</span> <b style="color:var(--gold);font-size:16px">${esc(player(winner).name)}</b> — teraz wybiera mystery box!`;
+  renderWheel();
+ }
+ requestAnimationFrame(frame);
+};
+
+function finishClubSave(club,colors=null){
+  if(pendingClubPlayer===null)return;
+  const p=player(pendingClubPlayer);p.club=club;
+  if(colors)setClubColors(p,colors);else{p.clubColor1='';p.clubColor2='';p.clubSourceName='';}
+  pendingClubPlayer=null;$('clubModal').classList.add('hidden');$('clubSaveBtn').disabled=false;$('clubSavePlainBtn').classList.add('hidden');save();renderWheel();
+}
+$('clubForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(pendingClubPlayer===null)return;
+  const club=$('clubInput').value.trim();
+  if(!club){$('clubError').textContent='Wpisz nazwę klubu, aby kontynuować.';return;}
+  $('clubSaveBtn').disabled=true;$('clubSavePlainBtn').classList.add('hidden');
+  $('clubError').style.color='#c8efb2';$('clubError').textContent='Szukam klubu i pobieram jego barwy…';
+  try{
+    const colors=await lookupClubColors(club);
+    $('clubError').textContent=`Znaleziono: ${colors.matchedName}. Barwy pobrane!`;
+    finishClubSave(club,colors);
+  }catch(err){
+    $('clubSaveBtn').disabled=false;$('clubError').style.color='#ffaaaa';
+    $('clubError').textContent=err.message+' Możesz zapisać klub bez kolorów.';
+    $('clubSavePlainBtn').classList.remove('hidden');
+  }
+});
+$('clubSavePlainBtn').addEventListener('click',()=>{
+  const club=$('clubInput').value.trim();if(!club){$('clubError').textContent='Wpisz nazwę klubu.';return;}
+  finishClubSave(club,null);
+});
+document.querySelectorAll('.tab').forEach(b=>b.addEventListener('click',()=>{
+document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x===b));['table','fixtures','stats','draw','typer','admin'].forEach(t=>$('view-'+t).classList.toggle('hidden',t!==b.dataset.tab));if(b.dataset.tab==='draw')renderWheel();if(b.dataset.tab==='typer')renderTyper();if(b.dataset.tab==='admin'&&logged)renderAdmin()}));
+$('roundSelect').addEventListener('change',renderRound);$('adminRound').innerHTML=data.rounds.map((g,i)=>`<option value="${i}">Kolejka ${i+1}</option>`).join('');$('adminRound').value=currentRound();$('adminRound').addEventListener('change',renderAdmin);
+$('loginBtn').onclick=async()=>{
+  $('loginBtn').disabled=true;$('loginError').textContent='Logowanie…';
+  const email=$('adminEmail').value.trim(),password=$('adminPassword').value;
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  if(error){$('loginError').textContent='Nie udało się zalogować: '+error.message;$('loginBtn').disabled=false;return;}
+  const {data:isAdmin,error:adminError}=await sb.rpc('is_admin');
+  if(adminError||!isAdmin){
+    await sb.auth.signOut();$('loginError').textContent='To konto nie ma uprawnień administratora.';$('loginBtn').disabled=false;return;
+  }
+  logged=true;$('loginPanel').classList.add('hidden');$('adminPanel').classList.remove('hidden');
+  if(!cloudStateExists)await save();
+  showCloudStatus('Zalogowano. Synchronizacja aktywna.',false);renderAdmin();$('loginBtn').disabled=false;
+};
+$('logoutBtn').onclick=async()=>{
+  await sb.auth.signOut();logged=false;$('adminPanel').classList.add('hidden');$('loginPanel').classList.remove('hidden');$('adminPassword').value='';
+};
+$('savePlayers').onclick=async()=>{
+  const changed=[];
+  data.players.forEach((p,i)=>{
+    p.name=document.querySelector(`[data-name="${i}"]`).value.trim()||`Gracz ${i+1}`;
+    const newClub=document.querySelector(`[data-club="${i}"]`).value.trim();
+    if(newClub!==p.club){p.club=newClub;p.clubColor1='';p.clubColor2='';p.clubSourceName='';}
+    if(p.club&&!p.clubColor1)changed.push(p);
+  });
+  if(changed.length){
+    $('savePlayers').disabled=true;$('savePlayers').textContent='POBIERAM BARWY…';
+    const results=await Promise.all(changed.map(async p=>{
+      try{const colors=await lookupClubColors(p.club);setClubColors(p,colors);return null;}
+      catch(err){return `${p.name}: ${err.message}`;}
+    }));
+    const errors=results.filter(Boolean);
+    $('savePlayers').disabled=false;$('savePlayers').textContent='ZAPISZ UCZESTNIKÓW';
+    save();
+    alert(errors.length?`Zapisano uczestników. Nie udało się pobrać barw dla:\\n${errors.join('\\n')}`:'Zapisano uczestników i pobrano barwy klubów.');
+  }else{save();alert('Zapisano uczestników.');}
+};
+$('saveScores').onclick=()=>{let r=+$('adminRound').value;data.rounds[r].forEach((m,i)=>{let h=document.querySelector(`[data-h="${i}"]`).value,a=document.querySelector(`[data-a="${i}"]`).value;m.hs=h===''?'':String(Math.max(0,Math.min(99,parseInt(h,10)||0)));m.as=a===''?'':String(Math.max(0,Math.min(99,parseInt(a,10)||0)))});save();if(data.rounds[r].every(done)&&r<8){$('adminRound').value=String(r+1);renderAdmin();alert(`Wyniki zapisane. Kolejka ${r+2} jest gotowa do uzupełnienia.`)}else{renderAdmin();alert('Wyniki zapisane.')}};
+$('resetBtn').onclick=()=>{if(confirm('Na pewno usunąć wszystkie wyniki?')){data.rounds.forEach(g=>g.forEach(m=>{m.hs='';m.as=''}));save();alert('Wyniki wyczyszczone.')}};
+$('resetDrawBtn').onclick=()=>{if(confirm('Na pewno rozpocząć losowanie od początku?')){data.drawRemaining=data.players.map(p=>p.id);data.drawnOrder=[];wheelAngle=0;$('drawWinner').textContent='';save();alert('Losowanie zresetowane.')}};
+$('adminRound').dispatchEvent(new Event('change'));render();
+async function fetchCloudState(){
+  const {data:row,error}=await sb.from('tournament_state').select('state,updated_at').eq('id',1).maybeSingle();
+  if(error){showCloudStatus('Błąd odczytu bazy: '+error.message,true);return;}
+  if(row&&row.state&&Array.isArray(row.state.players)&&row.state.players.length){
+    cloudStateExists=true;
+    const remote=JSON.stringify(row.state);
+    if(remote!==lastRemoteState){
+      const predictions=data.typerPredictions||[];
+      data=row.state;data.typerPredictions=predictions;
+      if(!Array.isArray(data.drawRemaining))data.drawRemaining=data.players.map(p=>p.id);
+      if(!Array.isArray(data.drawnOrder))data.drawnOrder=[];
+      if(!Array.isArray(data.typerPredictions))data.typerPredictions=[];
+      data.players.forEach(p=>{if(typeof p.clubColor1!=='string')p.clubColor1='';if(typeof p.clubColor2!=='string')p.clubColor2='';});
+      lastRemoteState=remote;localStorage.setItem(KEY,JSON.stringify(data));render();
+    }
+  }
+}
+async function fetchCloudPredictions(){
+  const {data:rows,error}=await sb.from('predictions').select('id,name,order_ids,created_at').order('created_at',{ascending:true});
+  if(error){console.warn('Predictions load:',error.message);return;}
+  data.typerPredictions=(rows||[]).map(r=>({id:r.id,name:r.name,order:r.order_ids,createdAt:r.created_at}));
+  renderTyper();
+}
+async function initCloud(){
+  showCloudStatus('Łączenie z bazą online…',false);
+  await fetchCloudState();await fetchCloudPredictions();
+  const {data:sessionData}=await sb.auth.getSession();
+  if(sessionData?.session){
+    const {data:isAdmin}=await sb.rpc('is_admin');
+    if(isAdmin){logged=true;$('loginPanel').classList.add('hidden');$('adminPanel').classList.remove('hidden');renderAdmin();}
+  }
+  cloudReady=true;
+  if(!cloudStateExists)showCloudStatus('Baza jest gotowa. Zaloguj się jako administrator, aby opublikować dane turnieju.',false);
+  else showCloudStatus('Połączono z bazą. Dane są aktualne.',false);
+  setInterval(async()=>{if(!logged)await fetchCloudState();await fetchCloudPredictions();},5000);
+}
+initCloud().catch(err=>{console.error(err);showCloudStatus('Nie udało się połączyć z bazą online.',true);});
+</script></body></html>
